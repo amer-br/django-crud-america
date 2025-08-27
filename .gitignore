@@ -1,0 +1,18 @@
+# Entorno virtual
+venv/
+*.pyc
+__pycache__/
+
+# Archivos de configuración local
+*.sqlite3
+*.env
+
+# Archivos de logs
+*.log
+
+# Carpeta de migraciones (opcional subirlas si quieres)
+# apps/**/migrations/
+
+# Static files
+/staticfiles/
+/media/
