@@ -10,8 +10,8 @@ __pycache__/
 # Archivos de logs
 *.log
 
-# Carpeta de migraciones (opcional subirlas si quieres)
-# apps/**/migrations/
+# Carpeta de migraciones (ignorar todas)
+**/migrations/
 
 # Static files
 /staticfiles/
