@@ -1,41 +1,75 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Libros</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="container mt-4">
-    <h1>Libros</h1>
-    <a class="btn btn-primary mb-3" href="{% url 'libro-create' %}">Nuevo Libro</a>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Título</th>
-                <th>Autor</th>
-                <th>Publicado</th>
-                <th>Precio</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for libro in libros %}
-            <tr>
-                <td>{{ libro.titulo }}</td>
-                <td>{{ libro.autor }}</td>
-                <td>{{ libro.fechapublicacion }}</td>
-                <td>{{ libro.precio }}</td>
-                <td>
-                    <a class="btn btn-info btn-sm" href="{% url 'libro-detail' libro.pk %}">Ver</a>
-                    <a class="btn btn-warning btn-sm" href="{% url 'libro-update' libro.pk %}">Editar</a>
-                    <a class="btn btn-danger btn-sm" href="{% url 'libro-delete' libro.pk %}">Eliminar</a>
-                </td>
-            </tr>
-        {% empty %}
-            <tr><td colspan="5">No hay libros.</td></tr>
-        {% endfor %}
-        </tbody>
-    </table>
-</body>
-</html>
+{% extends "./base.html" %}
+
+{% block title %}Gestión de Libros{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-md-4">
+        {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <h2>Registrar Libro</h2>
+        <div class="card">
+            <div class="card-body">
+                <form action="{% url 'libro-create' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <input type="text" name="txtTitulo" class="form-control" placeholder="Título" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" name="txtAutor" class="form-control" placeholder="Nombre del Autor" required>
+                    </div>
+                    <div class="mb-3">
+                        <input type="date" name="fechaPublicacion" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <input type="number" name="numPrecio" class="form-control" step="0.01" min="0" placeholder="Precio">
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h2>Listado de Libros</h2>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Título</th>
+                        <th>Autor</th>
+                        <th>Fecha</th>
+                        <th>Precio</th>
+                        <th colspan="2">Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for l in libros %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ l.titulo }}</td>
+                        <td>{{ l.autor }}</td>
+                        <td>{{ l.fechapublicacion }}</td>
+                        <td>{{ l.precio }}</td>
+                        <td><a href="{% url 'libro-update' l.id %}" class="btn btn-info btn-sm">Editar</a></td>
+                        <td><a href="{% url 'libro-delete' l.id %}" class="btn btn-danger btn-sm">Eliminar</a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7">No hay libros registrados.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
